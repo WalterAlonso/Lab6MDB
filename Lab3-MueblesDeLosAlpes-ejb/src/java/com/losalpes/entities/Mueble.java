@@ -12,6 +12,8 @@
 
 package com.losalpes.entities;
 
+import java.util.List;
+
 /**
  * Clase que representa la información de un mueble en el sistema
  * 
@@ -63,6 +65,11 @@ public class Mueble
      */
     private boolean seleccion;
 
+    /**
+     * Lista de promociones que aplican al mueble
+     */
+    public List<Promocion> promociones;
+    
     //-----------------------------------------------------------
     // Constructores
     //-----------------------------------------------------------
@@ -260,5 +267,19 @@ public class Mueble
     {
         cantidad--;
     } 
+
+    /**
+     * @return the promociones
+     */
+    public List<Promocion> getPromociones() {
+        return promociones;
+    }
+
+    /**
+     * @param promociones the promociones to set
+     */
+    public void setPromociones(List<Promocion> promociones) {
+        this.promociones = promociones;
+    }
 
 }

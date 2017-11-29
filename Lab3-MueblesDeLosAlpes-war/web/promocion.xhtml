@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+    Document   : vendedores
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/main-template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:param name="titulo" value="Catálogo de muebles" />
+    <ui:define name="body">
+
+        <!-- Header del panel -->
+        <h:form>
+            <h:outputText id="linkHeader"
+                          value="Administración de promociones" style="color:white"/>
+        </h:form>
+
+        <h:panelGroup>
+            <h:form>
+                <div align="right" style="padding-right: 10px">
+                    <h:commandButton style="background: transparent" image="./resources/img/pag/atras.png" action="menu.xhtml"/>
+                </div>
+            </h:form>
+            <h:form>               
+                        <div class="ui-grid ui-grid-responsive">
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-6">
+                                    <p:outputLabel for="TxtDescripcion"
+                                                   value="Descripcion"
+                                                   style="font-weight: bold"/>
+                                    <p:inputText id="TxtDescripcion"
+                                                 size="20"
+                                                 maxlength="45"
+                                                 value="#{promocionBean.promocion.descripcion}"
+                                                 required="true"
+                                                 label="Descripción">
+                                        <f:validateLength minimum="6"/>
+                                    </p:inputText>
+                                    <p:message id="descMsg" for="TxtDescripcion" />
+                                </div>
+                                <div class="ui-grid-col-6">
+                                     <p:outputLabel  value="Tipo Mueble" style="font-weight: bold" />
+                    <h:selectOneMenu value="#{promocionBean.promocion.tipo}" label="Tipo">
+                        <f:selectItems value="#{catalogoBean.tiposMuebles}" />
+                    </h:selectOneMenu>
+                                </div>   
+                            </div>
+                            <div class="ui-grid-row">
+                                    <div class="ui-grid-col-6">                                    
+                                    <p:outputLabel for="TxtFechaInicio" value="Fecha Inicio" 
+                                                   style="font-weight: bold"/>
+                                    <p:calendar id="TxtFechaInicio" value="#{promocionBean.promocion.fechaInicio}" 
+                                                locale="es" navigator="true" pattern="yyyy-MMM-dd" 
+                                                required="true" requiredMessage="campo requerido">
+                                         <p:ajax event="dateSelect" update="TxtFechaFin" />
+                                    </p:calendar>
+                                    </div>
+                                    <div class="ui-grid-col-6">                                    
+                                    <p:outputLabel for="TxtFechaFin" value="Fecha Fin" 
+                                                   style="font-weight: bold"/>
+                                    <p:calendar id="TxtFechaFin" value="#{promocionBean.promocion.fechaFin}" 
+                                                 disabled="#{empty promocionBean.promocion.fechaInicio}"
+                                                 mindate="#{promocionBean.promocion.fechaInicio}"
+                                                locale="es" navigator="true" pattern="yyyy-MMM-dd" 
+                                                required="true" requiredMessage="campo requerido">
+                                         <f:attribute name="TxtFechaInicio" value="#{promocionBean.promocion.fechaInicio}" />
+                                        <f:validator validatorId="primeDateRangeValidator" />
+                                    </p:calendar>
+                                </div>
+                            </div>
+                        </div>                        
+                <h:commandButton value="Agregar" action="#{promocionBean.agregarPromocion}"/>
+            </h:form>
+        </h:panelGroup>
+
+       
+         <h:form>
+            <h:panelGroup>
+                
+                <p:dataList value="#{promocionBean.promociones}"  var="promocioness" paginator="true" rows="5">
+                    <f:facet name="header" >
+                        Datos de promociones
+                    </f:facet>
+
+                    <!--<h:panelGrid columns="4" style="width:100%" columnClasses="detail">
+                       
+                        <p:outputPanel>-->
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <h:outputText value="Descripcion" />
+                                <h:outputText value="#{promocioness.descripcion}" style="font-weight: bold"/>
+                                
+                                <h:outputText value="Tipo mueble:" />
+                                <h:outputText value="#{promocioness.tipo}" style="font-weight: bold"/>
+
+                                <h:outputText value="Fecha Inicio:" />
+                                <h:outputText value="#{promocioness.fechaInicio}" style="font-weight: bold"/>
+                                
+                                <h:outputText value="Fecha Fin:" />
+                                <h:outputText value="#{promocioness.fechaFin}" style="font-weight: bold"/>
+                            </h:panelGrid>
+                        <!--</p:outputPanel>
+                    </h:panelGrid>-->
+                    <center>
+                        <h:commandButton id="DDRtn" action="#{promocionBean.eliminarPromocion}"
+                                         value="Eliminar"  >
+                            <f:param name="promocionId" value="#{promocioness.id}"/>
+                        
+                        </h:commandButton> 
+                    </center>
+                </p:dataList>
+
+
+            </h:panelGroup>   
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+
