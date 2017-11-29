@@ -17,6 +17,11 @@ public class Promocion {
     //-----------------------------------------------------------
     
     /**
+     * ID de la promocion
+     */
+    public Long id;
+    
+    /**
      * Fecha de inicio de la promocion
      */
     private Date fechaInicio;
@@ -120,6 +125,20 @@ public class Promocion {
      */
     public void setTipo(TipoMueble tipo) {
         this.tipo = tipo;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
   

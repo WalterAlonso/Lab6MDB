@@ -13,6 +13,7 @@ package com.losalpes.servicios;
 
 import com.losalpes.entities.ExperienciaVendedor;
 import com.losalpes.entities.Mueble;
+import com.losalpes.entities.Promocion;
 import com.losalpes.entities.RegistroVenta;
 import com.losalpes.entities.TipoMueble;
 import com.losalpes.entities.TipoUsuario;
@@ -55,6 +56,11 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
      */
     private static ArrayList<RegistroVenta> registrosVentas;
 
+    /**
+     * Lista de promociones
+     */
+    private static ArrayList<Promocion> promociones;
+    
     //-----------------------------------------------------------
     // Constructor
     //-----------------------------------------------------------
@@ -64,6 +70,10 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
      */
     public ServicioPersistenciaMock()
     {
+        if (promociones== null)
+        {
+            promociones = new ArrayList<>();
+        }
         if (vendedores == null)
         {
             vendedores = new ArrayList();
@@ -159,6 +169,12 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
         {
             registrosVentas.add((RegistroVenta) obj);
         }
+        else if (obj instanceof Promocion)
+        {
+            Promocion m = (Promocion) obj;
+            m.setId((long)promociones.size() + 1);
+            promociones.add(m);
+        } 
     }
 
     /**
@@ -213,6 +229,20 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
                 }
             }
         }
+        else if (obj instanceof Promocion)
+        {
+            Promocion editar = (Promocion) obj;
+            Promocion promocion;
+            for (int i = 0; i < promociones.size(); i++)
+            {
+                promocion = promociones.get(i);
+                if (promocion.getId()== editar.getId())
+                {
+                    promociones.set(i, editar);
+                    break;
+                }
+            }
+        } 
     }
 
     /**
@@ -278,6 +308,22 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
                 }
             }
         }
+        else if (obj instanceof Promocion)
+        {
+            Promocion promocion;
+            Promocion eliminar = (Promocion) obj;
+            for (int i = 0; i < promociones.size(); i++)
+            {
+                promocion = promociones.get(i);
+                if (eliminar.getId()== promocion.getId())
+                {
+                    promociones.remove(i);
+                    break;
+                }
+
+            }
+
+        } 
     }
 
     /**
@@ -303,6 +349,10 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
         else if (c.equals(RegistroVenta.class))
         {
             return registrosVentas;
+        } 
+        else if (c.equals(Promocion.class))
+        {
+            return promociones;
         } 
         else
         {
@@ -347,6 +397,17 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
             {
                 Usuario mue = (Usuario) v;
                 if (mue.getLogin().equals(id))
+                {
+                    return mue;
+                }
+            }
+        }
+        else if (c.equals(Promocion.class))
+        {
+            for (Object v : findAll(c))
+            {
+                Promocion mue = (Promocion) v;
+                if (mue.getId().equals(id))
                 {
                     return mue;
                 }
