@@ -119,6 +119,7 @@ public class ServicioVendedoresMock implements IServicioVendedoresMockRemote, IS
         msg += "Cargo: " + cVendedor.getPerfil() + "\n";
         msg += "Salario: " + cVendedor.getSalario() + "\n";
         TextMessage tm = session.createTextMessage();
+        tm.setStringProperty("type", "RRHH");
         tm.setText(msg);
         return tm;
     }
