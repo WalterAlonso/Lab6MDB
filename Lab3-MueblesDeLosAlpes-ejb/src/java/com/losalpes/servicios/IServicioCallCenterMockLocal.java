@@ -18,8 +18,6 @@ import javax.jms.Session;
 @Local
 public interface IServicioCallCenterMockLocal {
 
-    public Message createPromocionMessage(Session session) throws JMSException;
-
-    public void notificarPromocion(Promocion promocion) throws JMSException;
+    public void mostrarMessage(String msg);
 
 }

@@ -19,7 +19,5 @@ import javax.jms.Session;
 @Remote
 public interface IServicioMercadeoMockRemote {
 
-    public Message createPromocionMessage(Session session) throws JMSException;
-
-    public void notificarPromocion(Promocion promocion) throws JMSException;
+    public void mostrarMessage(String msg);
 }

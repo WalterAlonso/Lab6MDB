@@ -5,15 +5,20 @@
  */
 package com.losalpes.jms;
 
+import com.losalpes.entities.Mueble;
+import com.losalpes.entities.Promocion;
+import com.losalpes.servicios.IServicioCallCenterMockLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
 /**
@@ -31,33 +36,47 @@ import javax.jms.TextMessage;
     ,
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "CallCenterMessage")
     ,
-    @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "type = 'callCenter'")})
+    @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "type = 'producto'")})
 public class CallCenterMessage implements MessageListener {
 
     @Resource
     private MessageDrivenContext mdc;
+
+    @EJB
+    private IServicioCallCenterMockLocal callCenter;
 
     public CallCenterMessage() {
     }
 
     @Override
     public void onMessage(Message message) {
-        TextMessage msg = null;
+        ObjectMessage msg = null;
         try {
-            if (message instanceof TextMessage) {
-                msg = (TextMessage) message;
-                Logger.getLogger(CallCenterMessage.class.getName()).log(Level.INFO,
-                        "CallCenter: \n" + msg.getText());
+            if (message instanceof ObjectMessage) {
+                msg = (ObjectMessage) message;
+                Mueble muebles;
+                muebles = (Mueble) msg;
+
+                String txt = createMessage(muebles.getPromociones().get(0));
+                callCenter.mostrarMessage(txt);
             } else {
                 Logger.getLogger(CallCenterMessage.class.getName()).log(Level.SEVERE,
                         "CallCenter: Mensaje de tipo equivocado: " + message.getClass().getName());
             }
-        } catch (JMSException e) {
-            e.printStackTrace();
-            mdc.setRollbackOnly();
         } catch (Throwable te) {
             te.printStackTrace();
+            mdc.setRollbackOnly();
         }
+
+    }
+
+    private String createMessage(Promocion promocion) {
+        String msg = "Se ha añadido una promoción: " + promocion.getId() + "\n";
+        msg += "Descripción: " + promocion.getDescripcion() + "\n";
+        msg += "Tipo de Mueble: " + promocion.getTipo().name() + "\n";
+        msg += "Fecha Inicio: " + promocion.getFechaInicio() + "\n";
+        msg += "Fecha Fin: " + promocion.getFechaFin() + "\n";
+        return msg;
     }
 
 }

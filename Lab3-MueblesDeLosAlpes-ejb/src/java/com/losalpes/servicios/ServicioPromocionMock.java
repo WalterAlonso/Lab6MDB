@@ -12,10 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
 
 /**
  *
@@ -33,14 +42,13 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
     @EJB
     private IServicioPersistenciaMockLocal persistencia;
 
-    @EJB
-    private IServicioVentasMockLocal ventas;
+    private Promocion promocion;
 
-    @EJB
-    private IServicioMercadeoMockLocal mercadeo;
+    @Resource(mappedName = "jms/promocionCreadaTopicFactory")
+    private ConnectionFactory connectionFactory;
 
-    @EJB
-    private IServicioCallCenterMockLocal callCenter;
+    @Resource(mappedName = "jms/promocionCreadaTopic")
+    private Topic topic;
 
     //-----------------------------------------------------------
     // Constructor
@@ -63,29 +71,15 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
     public void agregarPromocion(Promocion promocion) {
         try {
             persistencia.create(promocion);
-
+            this.promocion = promocion;
         } catch (OperacionInvalidaException ex) {
             Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            ventas.notificarPromocion(promocion);
+            notificarPromocion();
         } catch (JMSException ex) {
-            Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, "Error "
-                    + "enviando la notificación de creación de un a promocion a Ventas", ex);
+            Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            mercadeo.notificarPromocion(promocion);
-        } catch (JMSException ex) {
-            Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, "Error "
-                    + "enviando la notificación de creación de un a promocion a Mercadeo", ex);
-        }
-        try {
-            callCenter.notificarPromocion(promocion);
-        } catch (JMSException ex) {
-            Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, "Error "
-                    + "enviando la notificación de creación de un a promocion a Call center", ex);
-        }
-
     }
 
     /**
@@ -111,5 +105,41 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
     @Override
     public List<Promocion> darPromociones() {
         return persistencia.findAll(Promocion.class);
+    }
+
+    public Message createPromocionMessage(Session session) throws JMSException {
+        String msg = "Se ha creado un promocion: " + promocion.getId() + "\n";
+        msg += "Descripción: " + promocion.getDescripcion() + "\n";
+        msg += "Tipo de Mueble: " + promocion.getTipo().name() + "\n";
+        msg += "Fecha Inicio: " + promocion.getFechaInicio() + "\n";
+        msg += "Fecha Fin: " + promocion.getFechaFin() + "\n";
+        TextMessage tm = session.createTextMessage();
+        tm.setText(msg);
+        tm.setStringProperty("type", "promocion");
+        return tm;
+    }
+
+    public void notificarPromocion() throws JMSException {
+        Connection connection = connectionFactory.createConnection();
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        MessageProducer messageProducer = session.createProducer((Destination) topic);
+
+        try {
+            messageProducer.send(createPromocionMessage(session));
+        } catch (JMSException ex) {
+            Logger.getLogger(ServicioVendedoresMock.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Error cerrando la"
+                            + " sesión", e);
+                }
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }
