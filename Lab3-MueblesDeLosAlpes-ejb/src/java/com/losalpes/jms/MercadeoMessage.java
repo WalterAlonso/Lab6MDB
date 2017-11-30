@@ -56,7 +56,7 @@ public class MercadeoMessage implements MessageListener {
             if (message instanceof ObjectMessage) {
                 msg = (ObjectMessage) message;
                 Mueble mueble;
-                mueble = (Mueble) msg;
+                mueble = (Mueble) msg.getObject();
 
                 String txt = createMessage(mueble);
                 mercadeo.mostrarMessage(txt);
@@ -72,7 +72,8 @@ public class MercadeoMessage implements MessageListener {
     }
 
     private String createMessage(Mueble mueble) {
-        String msg = "Se ha añadido una promocion a un mueble: " + mueble.getNombre() + "\n";
+        String msg = "Se ha añadido una promocion a un mueble:\n";
+        msg += "Nombre: " + mueble.getNombre() + "\n";
         msg += "Descripción: " + mueble.getDescripcion() + "\n";
         msg += "Precio: " + mueble.getPrecio() + "\n";
         msg += "Referencia: " + mueble.getReferencia() + "\n";

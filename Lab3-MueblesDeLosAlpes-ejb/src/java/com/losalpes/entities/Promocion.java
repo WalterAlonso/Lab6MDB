@@ -5,13 +5,14 @@
  */
 package com.losalpes.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author WALTER
  */
-public class Promocion {
+public class Promocion implements Serializable{
     //-----------------------------------------------------------
     // Atributos
     //-----------------------------------------------------------

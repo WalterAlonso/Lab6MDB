@@ -79,13 +79,14 @@ public class ServicioCatalogoMock implements IServicioCatalogoMockRemote, IServi
     @Override
     public void agregarMueble(Mueble mueble) {
         try {
-            List<Promocion> promociones = null;
-            Promocion prom = new Promocion("Descripcion", TipoMueble.Interior, new Date(), new Date());
-            promociones.add(prom);
-            mueble.setPromociones(promociones);
             persistencia.create(mueble);
 
-            muebleC = mueble;
+            try {
+                muebleC = mueble;
+                notificarPromocion();
+            } catch (JMSException ex) {
+                Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (OperacionInvalidaException ex) {
             Logger.getLogger(ServicioCatalogoMock.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -135,6 +136,21 @@ public class ServicioCatalogoMock implements IServicioCatalogoMockRemote, IServi
     @Override
     public List<Mueble> darMuebles() {
         return persistencia.findAll(Mueble.class);
+    }
+
+    /**
+     * agrega promocion al mueble
+     *
+     * @param promocion
+     * @param mueble
+     */
+    @Override
+    public void agregarPromocionAMueble(Promocion promocion, Mueble mueble) {
+        mueble.promociones = promocion;
+        /*if (mueble.promociones == null){
+             mueble.promociones = new ArrayList<>();
+         }   
+         mueble.promociones.add(promocion);*/
     }
 
     public Message createPromocionMessage(Session session) throws JMSException {

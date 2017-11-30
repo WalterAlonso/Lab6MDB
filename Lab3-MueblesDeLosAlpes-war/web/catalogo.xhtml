@@ -20,7 +20,7 @@
         <h:outputText id="linkHeader"
                           value="Administración de Muebles" style="color:white"/>
         <p:fieldset legend="Muebles del Sistema">
-        <h:form>
+        <h:form id="t">
             <!-- Panel para agregar un nuevo mueble -->
             <h:panelGroup>
                 <h:panelGrid width="100px" columns="1" columnClasses="pnlGrdClass, pnlGrdClass, pnlGrdClassLong">
@@ -67,8 +67,8 @@
                 </h:panelGrid>
                 
                 <h:panelGrid width="100px" columns="1" columnClasses="pnlGrdClass, pnlGrdClass, pnlGrdClassLong">
-                    <h:outputLabel for="TxtNombre"
-                                     value="Nombre" />
+                    <h:outputLabel for="TxtCantidad"
+                                     value="Cantidad" />
                     <h:inputText id="TxtCantidad"
                                    maxlength="20"
                                    size="20"
@@ -95,13 +95,28 @@
                     <h:message id="descMsg" for="TxtDescripcion" />
 
                 </h:panelGrid>
-                <h:panelGrid>
+                <!--<h:panelGrid>
                     <h:selectOneMenu value="#{catalogoBean.mueble.tipo}" label="Tipo">
                         <f:selectItems value="#{catalogoBean.tiposMuebles}" />
                     </h:selectOneMenu>
+                </h:panelGrid>-->
+                
+                <h:panelGrid id="a">
+                     <h:outputLabel for="Tipo" value="Tipo de mueble" />
+                    <h:selectOneMenu value="#{catalogoBean.mueble.tipo}" label="Tipo">
+                        <f:selectItems value="#{catalogoBean.tiposMuebles}" />
+                        <p:ajax update=":t:promociones" process="@this"  listener="#{catalogoBean.changePromocion(event)}"/>
+                        <!--<f:ajax render=":t:promociones"   listener="#catalogoBean.changePromocion"/>-->
+                    </h:selectOneMenu>  
+                     <h:outputLabel for="promocion" value="Promocion" />
+                    <h:selectOneMenu converter="PromocionConverter" id="promociones" value="#{catalogoBean.promocion}" >
+                        <f:selectItems value="#{catalogoBean.promociones}" var="promocion" itemValue="#{promocion}" itemLabel="#{promocion.descripcion}" />
+                    </h:selectOneMenu>                    
                 </h:panelGrid>
+               
+                
 
-                <h:commandButton value="Agregar" action="#{catalogoBean.agregarMueble}" />
+                <h:commandButton value="Agregar" action="#{catalogoBean.agregarMueble}"  />                
                 <h:commandButton value="Nuevo" action="#{catalogoBean.limpiar}" />
             </h:panelGroup>
             
@@ -138,7 +153,9 @@
                     <p:column headerText="Tipo">
                         <h:outputText value="#{file.tipo}" />
                     </p:column>
-                    
+                    <p:column headerText="Promocion">
+                        <h:outputText value="#{file.promociones.descripcion}" />
+                    </p:column>
                      <p:column headerText="Eliminar">
                          <h:commandLink actionListener="#{catalogoBean.eliminarMueble}"
                                              value="Eliminar" >

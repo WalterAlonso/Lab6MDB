@@ -73,6 +73,8 @@ public class ServicioPersistenciaMock implements IServicioPersistenciaMockRemote
         if (promociones== null)
         {
             promociones = new ArrayList<>();
+            promociones.add(new Promocion("Promo int 1", TipoMueble.Interior, new Date(2017,12,1), new Date(2017,12,30)));
+            promociones.add(new Promocion("Promo ext 1", TipoMueble.Exterior, new Date(2017,12,10), new Date(2017,12,20)));
         }
         if (vendedores == null)
         {

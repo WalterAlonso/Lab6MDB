@@ -50,14 +50,14 @@ public class CallCenterMessage implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        ObjectMessage msg = null;
         try {
+            ObjectMessage msg = null;
             if (message instanceof ObjectMessage) {
                 msg = (ObjectMessage) message;
-                Mueble muebles;
-                muebles = (Mueble) msg;
+                Mueble mueble;
+                mueble = (Mueble) msg.getObject();
 
-                String txt = createMessage(muebles.getPromociones().get(0));
+                String txt = createMessage(mueble.getPromociones());
                 callCenter.mostrarMessage(txt);
             } else {
                 Logger.getLogger(CallCenterMessage.class.getName()).log(Level.SEVERE,
@@ -71,7 +71,7 @@ public class CallCenterMessage implements MessageListener {
     }
 
     private String createMessage(Promocion promocion) {
-        String msg = "Se ha añadido una promoción: " + promocion.getId() + "\n";
+        String msg = "Se ha añadido una promoción: \n";
         msg += "Descripción: " + promocion.getDescripcion() + "\n";
         msg += "Tipo de Mueble: " + promocion.getTipo().name() + "\n";
         msg += "Fecha Inicio: " + promocion.getFechaInicio() + "\n";

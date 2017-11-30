@@ -5,8 +5,8 @@
  */
 package com.losalpes.servicios;
 
-import com.losalpes.entities.Mueble;
 import com.losalpes.entities.Promocion;
+import com.losalpes.entities.TipoMueble;
 import com.losalpes.excepciones.OperacionInvalidaException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -31,7 +30,7 @@ import javax.jms.Topic;
  * @author WALTER
  */
 @Stateless
-public class ServicioPromocionMock implements IServicioPromocionMockRemote, IServicioPromocionMockLocal {
+public class ServicioPromocionMock implements IServicioPromocionMockLocal {
 
     //-----------------------------------------------------------
     // Atributos
@@ -60,7 +59,7 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
     }
 
     //-----------------------------------------------------------
-    // Métodos
+    // MÃ©todos
     //-----------------------------------------------------------
     /**
      * Agrega una promocion al sistema
@@ -85,7 +84,7 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
     /**
      * Elimina una promocion del sistema
      *
-     * @param id Identificador único de la promocion a eliminar
+     * @param id Identificador Ãºnico de la promocion a eliminar
      */
     @Override
     public void eliminarPromocion(long id) {
@@ -95,6 +94,24 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
         } catch (OperacionInvalidaException ex) {
             Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Obtiene las promociones por tipo de mueble
+     *
+     * @param tipoMueble tipo de mueble
+     * @return las promociones del mueble.
+     */
+    @Override
+    public List<Promocion> darPromocionesPorTipoMueble(TipoMueble tipoMueble) {
+        List<Promocion> promociones = persistencia.findAll(Promocion.class);
+        List<Promocion> filteredPromociones = new ArrayList<>();
+        for (Promocion promocion : promociones) {
+            if (promocion.getTipo() == tipoMueble) {
+                filteredPromociones.add(promocion);
+            }
+        }
+        return filteredPromociones;
     }
 
     /**
@@ -109,7 +126,7 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
 
     public Message createPromocionMessage(Session session) throws JMSException {
         String msg = "Se ha creado un promocion: " + promocion.getId() + "\n";
-        msg += "Descripción: " + promocion.getDescripcion() + "\n";
+        msg += "DescripciÃ³n: " + promocion.getDescripcion() + "\n";
         msg += "Tipo de Mueble: " + promocion.getTipo().name() + "\n";
         msg += "Fecha Inicio: " + promocion.getFechaInicio() + "\n";
         msg += "Fecha Fin: " + promocion.getFechaFin() + "\n";
@@ -134,7 +151,7 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
                     session.close();
                 } catch (JMSException e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Error cerrando la"
-                            + " sesión", e);
+                            + " sesiÃ³n", e);
                 }
             }
             if (connection != null) {
@@ -142,4 +159,5 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote, ISer
             }
         }
     }
+
 }
