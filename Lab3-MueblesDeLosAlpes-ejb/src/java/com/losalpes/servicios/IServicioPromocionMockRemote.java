@@ -6,6 +6,7 @@
 package com.losalpes.servicios;
 
 import com.losalpes.entities.Promocion;
+import com.losalpes.entities.TipoMueble;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -32,4 +33,11 @@ public interface IServicioPromocionMockRemote {
      * @return promociones Lista de promociones
      */
     public List<Promocion> darPromociones();
+    
+    /**
+     * Devuelve todas las promociones del sistema segun tipo mueble
+     * @param tipoMueble Tipo mueble
+     * @return promociones Lista de promociones
+     */
+    public List<Promocion> darPromocionesPorTipoMueble(TipoMueble tipoMueble);
 }

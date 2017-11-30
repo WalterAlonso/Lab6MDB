@@ -7,7 +7,9 @@ package com.losalpes.servicios;
 
 import com.losalpes.entities.Mueble;
 import com.losalpes.entities.Promocion;
+import com.losalpes.entities.TipoMueble;
 import com.losalpes.excepciones.OperacionInvalidaException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -92,5 +94,22 @@ public class ServicioPromocionMock implements IServicioPromocionMockRemote,IServ
     public List<Promocion> darPromociones()
     {
         return persistencia.findAll(Promocion.class);
+    }
+    
+    /**
+     * Obtiene las p`romociones por tipo de mueble
+     * @param tipoMueble tipo de mueble
+     * @return las promociones del mueble.
+     */
+    @Override
+    public List<Promocion> darPromocionesPorTipoMueble(TipoMueble tipoMueble){        
+        List<Promocion> promociones =  persistencia.findAll(Promocion.class);
+        List<Promocion> filteredPromociones = new ArrayList<>();
+        for (Promocion promocion : promociones) {
+            if(promocion.getTipo() == tipoMueble){
+                filteredPromociones.add(promocion);
+            }
+        }
+        return filteredPromociones;
     }
 }

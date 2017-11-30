@@ -66,9 +66,9 @@ public class Mueble
     private boolean seleccion;
 
     /**
-     * Lista de promociones que aplican al mueble
+     * Promocion que aplica al mueble
      */
-    public List<Promocion> promociones;
+    public Promocion promociones;
     
     //-----------------------------------------------------------
     // Constructores
@@ -271,14 +271,14 @@ public class Mueble
     /**
      * @return the promociones
      */
-    public List<Promocion> getPromociones() {
+    public Promocion getPromociones() {
         return promociones;
     }
 
     /**
      * @param promociones the promociones to set
      */
-    public void setPromociones(List<Promocion> promociones) {
+    public void setPromociones(Promocion promociones) {
         this.promociones = promociones;
     }
 

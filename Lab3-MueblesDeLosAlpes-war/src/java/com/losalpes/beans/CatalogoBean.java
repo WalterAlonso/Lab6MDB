@@ -13,14 +13,17 @@
 package com.losalpes.beans;
 
 import com.losalpes.entities.Mueble;
+import com.losalpes.entities.Promocion;
 import com.losalpes.entities.TipoMueble;
 import com.losalpes.servicios.IServicioCatalogoMockLocal;
+import com.losalpes.servicios.IServicioPromocionMockLocal;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 
@@ -40,11 +43,18 @@ public class CatalogoBean implements Serializable
      */
     private Mueble mueble;
 
+    public Promocion promocion;
+    
+    public List<Promocion> promociones;
+    
     /**
      * Relación con la interfaz que provee los servicios necesarios del catálogo.
      */
     @EJB
     private IServicioCatalogoMockLocal catalogo;
+    
+    @EJB
+    private IServicioPromocionMockLocal servicioPromocion;
 
     //-----------------------------------------------------------
     // Constructor
@@ -90,6 +100,34 @@ public class CatalogoBean implements Serializable
         return catalogo.darMuebles();
     }
 
+    /**
+     * @return the promocion
+     */
+    public Promocion getPromocion() {
+        return promocion;
+    }
+
+    /**
+     * @param promocion the promocion to set
+     */
+    public void setPromocion(Promocion promocion) {
+        this.promocion = promocion;
+    }
+
+    /**
+     * @return the promociones
+     */
+    public List<Promocion> getPromociones() {
+        return promociones;
+    }
+
+    /**
+     * @param promociones the promociones to set
+     */
+    public void setPromociones(List<Promocion> promociones) {
+        this.promociones = promociones;
+    }
+
     //-----------------------------------------------------------
     // Métodos
     //-----------------------------------------------------------
@@ -99,6 +137,9 @@ public class CatalogoBean implements Serializable
      */
     public void agregarMueble()
     {
+        if (promocion != null){
+            catalogo.agregarPromocionAMueble(promocion, mueble);
+        }
         catalogo.agregarMueble(mueble);
         mueble=new Mueble();
     }
@@ -129,6 +170,9 @@ public class CatalogoBean implements Serializable
         {
              sitems[i] = new SelectItem(tipos[i]);
         }
+        
+        //mueble.setTipo(tipos[0]);
+        //changePromocion(null);
         return sitems;
     }
     
@@ -139,4 +183,13 @@ public class CatalogoBean implements Serializable
     {
         mueble=new Mueble();
     }
+    
+    public void changePromocion(AjaxBehaviorEvent e){
+        if (mueble.getTipo() != null) {           
+            setPromociones(servicioPromocion.darPromocionesPorTipoMueble(mueble.getTipo()));
+        }
+    }
+    /*catalogoBean.changePromocion
+catalogoBean.promocion
+catalogoBean.promociones*/
 }
