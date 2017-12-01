@@ -44,3 +44,14 @@ respectivos bean.
 5. El ejercicio del tutorial asociado al vendedor y su respectivo manejo en el MDB RecursosHumanosMessage..
 
 
+**************** Problemas en la ejecucion ********************
+Con Netbeans pasa algo raro y es que cuando se corre el proyecto puede que no despliegue, esto 
+en general nos ha pasado en la mayoria de proyectos, sin embargo no encontramos solucion, que puede hacer:
+
+- apenas abra el proyecto, dar clean and build.
+- si esto es fallido:
+	- valla a las carpetas "nbproject" del proy raiz, del Ejb y del War (los 3)
+	y valla a este archivO: "nbproject\private\private.properties"
+	y asegure que las rutas alli dadas, corresponden a las de su maquina local.
+- vuelva a abrir el proyecto y de clean and build, con esto ya el proyecto debe compilar y correr sin
+problema.
