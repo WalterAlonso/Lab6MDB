@@ -26,7 +26,7 @@ import javax.jms.TextMessage;
  * @author Juan Paz
  */
 @MessageDriven(mappedName = "jms/promocionCreadaTopic", activationConfig = {
-    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Dups-ok-acknowledge")
+    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
     ,
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")
     ,
