@@ -182,7 +182,7 @@ public class ServicioCatalogoMock implements IServicioCatalogoMockRemote, IServi
 
     public void notificarPromocion() throws JMSException {
         Connection connection = connectionFactory.createConnection();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.DUPS_OK_ACKNOWLEDGE);
         MessageProducer messageProducer = session.createProducer((Destination) topic);
 
         try {
