@@ -32,6 +32,12 @@ public interface IServicioCatalogoMockLocal
     public void agregarMueble(Mueble mueble);
 
     /**
+     * Edita un mueble
+     * @param mueble el mueble editado
+     */
+    public void editarMueble(Mueble mueble);
+    
+    /**
      * Elimina un mueble del sistema
      * @param id Identificador único del mueble a eliminar
      */

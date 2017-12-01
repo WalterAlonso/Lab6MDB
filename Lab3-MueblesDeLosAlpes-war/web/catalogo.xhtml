@@ -116,7 +116,7 @@
                
                 
 
-                <h:commandButton value="Agregar" action="#{catalogoBean.agregarMueble}"  />                
+                <h:commandButton value="Guardar" action="#{catalogoBean.agregarMueble}"  />                
                 <h:commandButton value="Nuevo" action="#{catalogoBean.limpiar}" />
             </h:panelGroup>
             
@@ -159,6 +159,12 @@
                      <p:column headerText="Eliminar">
                          <h:commandLink actionListener="#{catalogoBean.eliminarMueble}"
                                              value="Eliminar" >
+                             <f:param name="muebleId" value="#{file.referencia}" />
+                         </h:commandLink>     
+                    </p:column>
+                     <p:column headerText="Editar">
+                         <h:commandLink actionListener="#{catalogoBean.editarMueble}"
+                                             value="Editar" >
                              <f:param name="muebleId" value="#{file.referencia}" />
                          </h:commandLink>     
                     </p:column>

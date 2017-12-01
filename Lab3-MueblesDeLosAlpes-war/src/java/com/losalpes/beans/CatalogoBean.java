@@ -41,6 +41,8 @@ public class CatalogoBean implements Serializable {
 
     public Promocion promocion;
 
+    public boolean IsEditing;
+    
     public List<Promocion> promociones;
 
     /**
@@ -132,7 +134,12 @@ public class CatalogoBean implements Serializable {
         if (promocion != null) {
             catalogo.agregarPromocionAMueble(promocion, mueble);
         }
-        catalogo.agregarMueble(mueble);
+        if(this.IsEditing){
+            catalogo.editarMueble(mueble);
+        } else{
+            catalogo.agregarMueble(mueble);
+        }
+        IsEditing = false;
         mueble = new Mueble();
     }
 
@@ -171,6 +178,7 @@ public class CatalogoBean implements Serializable {
      * Elimina la información del mueble
      */
     public void limpiar() {
+        IsEditing = false;
         mueble = new Mueble();
     }
 
@@ -179,6 +187,29 @@ public class CatalogoBean implements Serializable {
             setPromociones(servicioPromocion.darPromocionesPorTipoMueble(mueble.getTipo()));
         }
     }
+    
+    /**
+     * 
+     * @param evento 
+     */
+    public void editarMueble(ActionEvent evento) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map map = context.getExternalContext().getRequestParameterMap();
+        long inventoryId = Long.parseLong((String) map.get("muebleId"));
+        
+        List<Mueble> muebles = catalogo.darMuebles();
+        for(Mueble m : muebles){
+            if (m.getReferencia() == inventoryId){
+                IsEditing = true;
+                this.mueble = m;
+                if (this.mueble.promociones != null){
+                    this.promocion = this.mueble.promociones;
+                }
+                break;
+            }
+        }        
+    }
+            
     /*catalogoBean.changePromocion
 catalogoBean.promocion
 catalogoBean.promociones*/

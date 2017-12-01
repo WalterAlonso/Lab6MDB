@@ -93,6 +93,24 @@ public class ServicioCatalogoMock implements IServicioCatalogoMockRemote, IServi
 
     }
 
+    
+    /**
+     * Agrega un mueble al sistema
+     *
+     * @param mueble Nuevo mueble
+     */
+    @Override
+    public void editarMueble(Mueble mueble) {
+        persistencia.update(mueble);
+        try {
+            muebleC = mueble;
+            notificarPromocion();
+        } catch (JMSException ex) {
+            Logger.getLogger(ServicioPromocionMock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
     /**
      * Se elimina un mueble del sistema dado su identificador único
      *
