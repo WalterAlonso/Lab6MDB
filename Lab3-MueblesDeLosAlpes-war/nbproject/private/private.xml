@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Juan%20Paz/Documents/Personales/ECOS/Desarrollo%20basado%20en%20componentes/Ejercicios/Lab6MDB/Lab3-MueblesDeLosAlpes-war/src/java/com/losalpes/beans/PromocionBean.java</file>
+            <file>file:/E:/Proyectos/cupidos/Lab6/Lab6MDB/Lab3-MueblesDeLosAlpes-war/web/catalogo.xhtml</file>
+            <file>file:/E:/Proyectos/cupidos/Lab6/Lab6MDB/Lab3-MueblesDeLosAlpes-war/src/java/com/losalpes/beans/CatalogoBean.java</file>
+            <file>file:/E:/Proyectos/cupidos/Lab6/Lab6MDB/Lab3-MueblesDeLosAlpes-war/src/java/com/losalpes/beans/PromocionBean.java</file>
+            <file>file:/E:/Proyectos/cupidos/Lab6/Lab6MDB/Lab3-MueblesDeLosAlpes-war/src/java/com/losalpes/converters/PromocionConverter.java</file>
         </group>
     </open-files>
 </project-private>
